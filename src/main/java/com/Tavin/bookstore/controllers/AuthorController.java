@@ -4,8 +4,6 @@ import com.Tavin.bookstore.dtos.Authors.AuthorsRequest;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.service.Author.AuthorService;
 import jakarta.servlet.ServletResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

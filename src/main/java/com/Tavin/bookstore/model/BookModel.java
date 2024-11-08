@@ -38,6 +38,6 @@ public class BookModel {
             fetch = FetchType.LAZY
     )
     @JoinColumn(name = "id_autor")
-    private AuthorModel autor;
+    private AuthorModel author;
 
 }

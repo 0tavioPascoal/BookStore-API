@@ -5,14 +5,14 @@ import com.Tavin.bookstore.model.AuthorModel;
 import java.time.LocalDate;
 
 public record AuthorsRequest(String name,
-                             LocalDate dataNascimento,
-                             String nacionalidade) {
+                             LocalDate dateOfBirth,
+                             String nacionality) {
 
     public AuthorModel mappedAuthor(){
         AuthorModel author = new AuthorModel();
         author.setName(this.name);
-        author.setNacionalidade(this.nacionalidade);
-        author.setDataNascimento(this.dataNascimento);
+        author.setDateofbirth(this.dateOfBirth);
+        author.setNationality(this.nacionality);
         return author;
     }
 }

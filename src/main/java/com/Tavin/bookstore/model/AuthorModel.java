@@ -3,9 +3,12 @@ package com.Tavin.bookstore.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.awt.print.Book;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,15 +28,26 @@ public class AuthorModel{
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @Column(name = "data_nascimento", nullable = false)
-    private LocalDate dataNascimento;
+    @Column(name = "data_of_birth", nullable = false)
+    private LocalDate dateofbirth;
 
-    @Column(name = "nacionalidade" , length = 50, nullable = false)
-    private String nacionalidade;
+    @Column(name = "nacionality" , length = 50, nullable = false)
+    private String nationality;
 
-    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY
 //            , cascade = CascadeType.ALL
     )
     private List<BookModel> book;
+
+    @CreatedDate
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "id_user")
+    private UUID idUser;
 
 }
