@@ -22,6 +22,13 @@ public class AuthorService {
     public AuthorModel Save(AuthorModel authorModel) {
         return repository.save(authorModel);}
 
+    public void Updated(AuthorModel authorModel) {
+        if(authorModel.getId() == null) {
+            throw new IllegalArgumentException("To update, the author must already be registered");
+        }
+        repository.save(authorModel);
+    }
+
     public Optional<AuthorModel> findById(UUID id) {
         return repository.findById(id);
     }
