@@ -1,9 +1,10 @@
 package com.Tavin.bookstore.service.Author;
 
+import com.Tavin.bookstore.exceptions.operationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.repository.AuthorRepository;
+import com.Tavin.bookstore.repository.BookRepository;
 import com.Tavin.bookstore.validator.AuthorValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,13 @@ public class AuthorService {
 
     private final AuthorRepository repository;
     private final AuthorValidator validator;
+    private final BookRepository bookRepository;
 
-    public AuthorService(AuthorRepository repository, AuthorValidator validator) {
+
+    public AuthorService(AuthorRepository repository, AuthorValidator validator, BookRepository bookRepository) {
         this.repository = repository;
         this.validator = validator;
+        this.bookRepository = bookRepository;
     }
 
     public AuthorModel Save(AuthorModel authorModel) {
@@ -38,8 +42,11 @@ public class AuthorService {
         return repository.findById(id);
     }
 
-    public void deleteById(UUID id) {
-        repository.deleteById(id);
+    public void deleteByAuthor(AuthorModel author){
+        if(ownBook(author)){
+            throw new operationNotPermitted("It is not allowed to delete an author with a registered book");
+        }
+        repository.delete(author);
     }
 
     public List<AuthorModel> search(String name, String nationality) {
@@ -57,4 +64,7 @@ public class AuthorService {
       return repository.findAll();
     }
 
+    public boolean ownBook(AuthorModel author){
+        return bookRepository.existsByAuthor(author);
+   }
 }

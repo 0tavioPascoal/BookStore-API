@@ -10,7 +10,7 @@ import java.util.Optional;
 @Component
 public class AuthorValidator {
 
-    private AuthorRepository repository;
+    private final AuthorRepository repository;
 
     public AuthorValidator(AuthorRepository repository) {
         this.repository = repository;
@@ -32,4 +32,5 @@ public class AuthorValidator {
 
         return !author.getId().equals(authorExists.get().getId()) && authorExists.isPresent();
     }
+
 }

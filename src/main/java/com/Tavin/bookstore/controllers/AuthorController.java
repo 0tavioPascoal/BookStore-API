@@ -4,6 +4,7 @@ import com.Tavin.bookstore.dtos.Authors.AuthorResponseDto;
 import com.Tavin.bookstore.dtos.Authors.AuthorsRequestDto;
 import com.Tavin.bookstore.dtos.Errors.ErrorResponse;
 import com.Tavin.bookstore.exceptions.duplicateRecordException;
+import com.Tavin.bookstore.exceptions.operationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.service.Author.AuthorService;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/authors")
 public class AuthorController {
 
-    private AuthorService service;
+    private final AuthorService service;
 
     public AuthorController(AuthorService service) {
         this.service = service;
@@ -60,14 +61,20 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable String id) {
-        Optional<AuthorModel> optionalAuthor = service.findById(UUID.fromString(id));
+    public ResponseEntity<Object> deleteAuthor(@PathVariable String id) {
+        try {
+            Optional<AuthorModel> optionalAuthor = service.findById(UUID.fromString(id));
 
-        if(optionalAuthor.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            if(optionalAuthor.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            service.deleteByAuthor(optionalAuthor.get());
+            return ResponseEntity.noContent().build();
+        } catch (operationNotPermitted e) {
+            var eResponse = ErrorResponse.errorConflict(e.getMessage());
+            return ResponseEntity.status(eResponse.statusCode()).body(eResponse);
         }
-        service.deleteById(optionalAuthor.get().getId());
-        return ResponseEntity.noContent().build();
+
     }
 
     @GetMapping()
@@ -87,19 +94,25 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateAuthor(@PathVariable String id,
+    public ResponseEntity<Object> updateAuthor(@PathVariable String id,
                                              @RequestBody AuthorsRequestDto authorsRequest) {
-        Optional<AuthorModel> optionalAuthor = service.findById(UUID.fromString(id));
+        try {
+            Optional<AuthorModel> optionalAuthor = service.findById(UUID.fromString(id));
 
-        if(optionalAuthor.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            if(optionalAuthor.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            var author = optionalAuthor.get();
+            author.setName(authorsRequest.name());
+            author.setNationality(authorsRequest.nationality());
+            author.setDateofbirth(authorsRequest.dateOfBirth());
+            service.Updated(author);
+
+            return ResponseEntity.noContent().build();
+        } catch (duplicateRecordException e){
+            var eDto = ErrorResponse.errorConflict(e.getMessage());
+            return ResponseEntity.status(eDto.statusCode()).body(eDto);
         }
-        var author = optionalAuthor.get();
-        author.setName(authorsRequest.name());
-        author.setNationality(authorsRequest.nationality());
-        author.setDateofbirth(authorsRequest.dateOfBirth());
-        service.Updated(author);
 
-        return ResponseEntity.noContent().build();
     }
 }
