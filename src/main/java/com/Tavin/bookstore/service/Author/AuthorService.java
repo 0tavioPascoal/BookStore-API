@@ -2,6 +2,7 @@ package com.Tavin.bookstore.service.Author;
 
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.repository.AuthorRepository;
+import com.Tavin.bookstore.validator.AuthorValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +15,22 @@ public class AuthorService {
 
 
     private final AuthorRepository repository;
+    private final AuthorValidator validator;
 
-    public AuthorService(AuthorRepository repository) {
+    public AuthorService(AuthorRepository repository, AuthorValidator validator) {
         this.repository = repository;
+        this.validator = validator;
     }
 
     public AuthorModel Save(AuthorModel authorModel) {
+        validator.validateAuthor(authorModel);
         return repository.save(authorModel);}
 
     public void Updated(AuthorModel authorModel) {
         if(authorModel.getId() == null) {
             throw new IllegalArgumentException("To update, the author must already be registered");
         }
+        validator.validateAuthor(authorModel);
         repository.save(authorModel);
     }
 
@@ -51,4 +56,5 @@ public class AuthorService {
 
       return repository.findAll();
     }
+
 }
