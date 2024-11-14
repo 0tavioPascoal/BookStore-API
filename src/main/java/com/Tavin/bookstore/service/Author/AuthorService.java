@@ -1,10 +1,10 @@
 package com.Tavin.bookstore.service.Author;
 
-import com.Tavin.bookstore.exceptions.operationNotPermitted;
+import com.Tavin.bookstore.infra.exceptions.operationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.repository.AuthorRepository;
 import com.Tavin.bookstore.repository.BookRepository;
-import com.Tavin.bookstore.validator.AuthorValidator;
+import com.Tavin.bookstore.infra.dtos.validator.AuthorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

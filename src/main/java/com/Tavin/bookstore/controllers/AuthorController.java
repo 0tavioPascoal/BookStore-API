@@ -1,12 +1,13 @@
 package com.Tavin.bookstore.controllers;
 
-import com.Tavin.bookstore.dtos.Authors.AuthorResponseDto;
-import com.Tavin.bookstore.dtos.Authors.AuthorsRequestDto;
-import com.Tavin.bookstore.dtos.Errors.ErrorResponse;
-import com.Tavin.bookstore.exceptions.duplicateRecordException;
-import com.Tavin.bookstore.exceptions.operationNotPermitted;
+import com.Tavin.bookstore.infra.dtos.Authors.AuthorResponseDto;
+import com.Tavin.bookstore.infra.dtos.Authors.AuthorsRequestDto;
+import com.Tavin.bookstore.infra.Errors.ErrorResponse;
+import com.Tavin.bookstore.infra.exceptions.duplicateRecordException;
+import com.Tavin.bookstore.infra.exceptions.operationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.service.Author.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,7 +29,7 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addAuthor(@RequestBody AuthorsRequestDto authorsRequest) {
+    public ResponseEntity<Object> addAuthor(@RequestBody @Valid AuthorsRequestDto authorsRequest) {
         try {
             AuthorModel author = authorsRequest.mappedAuthors();
             service.Save(author);
@@ -95,7 +96,7 @@ public class AuthorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateAuthor(@PathVariable String id,
-                                             @RequestBody AuthorsRequestDto authorsRequest) {
+                                             @RequestBody @Valid AuthorsRequestDto authorsRequest) {
         try {
             Optional<AuthorModel> optionalAuthor = service.findById(UUID.fromString(id));
 
@@ -105,7 +106,7 @@ public class AuthorController {
             var author = optionalAuthor.get();
             author.setName(authorsRequest.name());
             author.setNationality(authorsRequest.nationality());
-            author.setDateofbirth(authorsRequest.dateOfBirth());
+            author.setDateofbirth(authorsRequest.dateofbirth());
             service.Updated(author);
 
             return ResponseEntity.noContent().build();

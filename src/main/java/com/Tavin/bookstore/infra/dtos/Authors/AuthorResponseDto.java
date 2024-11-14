@@ -1,19 +1,19 @@
-package com.Tavin.bookstore.dtos.Authors;
+package com.Tavin.bookstore.infra.dtos.Authors;
 
 import com.Tavin.bookstore.model.AuthorModel;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record AuthorsRequestDto(UUID id,
+public record AuthorResponseDto(UUID id,
                                 String name,
-                                LocalDate dateOfBirth,
+                                LocalDate dateofbirth,
                                 String nationality) {
 
-    public AuthorModel mappedAuthors(){
+    public AuthorModel mappedAuthorsResponse(){
         AuthorModel author = new AuthorModel();
         author.setName(this.name());
-        author.setDateofbirth(this.dateOfBirth());
+        author.setDateofbirth(this.dateofbirth());
         author.setNationality(this.nationality());
         return author;
     }

@@ -1,4 +1,4 @@
-package com.Tavin.bookstore.exceptions;
+package com.Tavin.bookstore.infra.exceptions;
 
 public class operationNotPermitted extends RuntimeException {
     public operationNotPermitted(String message) {

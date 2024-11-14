@@ -1,4 +1,4 @@
-package com.Tavin.bookstore.dtos.Errors;
+package com.Tavin.bookstore.infra.Errors;
 
 public record fieldErrors(String field, String error) {
 }

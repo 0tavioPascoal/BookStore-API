@@ -1,6 +1,6 @@
-package com.Tavin.bookstore.validator;
+package com.Tavin.bookstore.infra.dtos.validator;
 
-import com.Tavin.bookstore.exceptions.duplicateRecordException;
+import com.Tavin.bookstore.infra.exceptions.duplicateRecordException;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.repository.AuthorRepository;
 import org.springframework.stereotype.Component;
