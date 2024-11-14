@@ -5,6 +5,8 @@ import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.repository.AuthorRepository;
 import com.Tavin.bookstore.repository.BookRepository;
 import com.Tavin.bookstore.infra.dtos.validator.AuthorValidator;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,19 +51,32 @@ public class AuthorService {
         repository.delete(author);
     }
 
+//    public List<AuthorModel> search(String name, String nationality) {
+//      if(name != null && nationality != null) {
+//        return repository.findByNameAndNationality(name, nationality);
+//      }
+//      if(name != null){
+//          return repository.findByName(name);
+//      }
+//
+//      if(nationality != null){
+//          return repository.findByNationality(nationality);
+//      }
+//
+//      return repository.findAll();
+//    }
+//
     public List<AuthorModel> search(String name, String nationality) {
-      if(name != null && nationality != null) {
-        return repository.findByNameAndNationality(name, nationality);
-      }
-      if(name != null){
-          return repository.findByName(name);
-      }
+       AuthorModel author = new AuthorModel();
+        author.setName(name);
+        author.setNationality(nationality);
 
-      if(nationality != null){
-          return repository.findByNationality(nationality);
-      }
-
-      return repository.findAll();
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<AuthorModel> example = Example.of(author, exampleMatcher);
+        return repository.findAll(example);
     }
 
     public boolean ownBook(AuthorModel author){
