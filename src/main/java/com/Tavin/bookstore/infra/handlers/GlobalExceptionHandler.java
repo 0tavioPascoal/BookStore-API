@@ -1,7 +1,7 @@
 package com.Tavin.bookstore.infra.handlers;
 
-import com.Tavin.bookstore.infra.Errors.ErrorResponse;
-import com.Tavin.bookstore.infra.Errors.fieldErrors;
+import com.Tavin.bookstore.infra.errors.ErrorResponse;
+import com.Tavin.bookstore.infra.errors.fieldErrors;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

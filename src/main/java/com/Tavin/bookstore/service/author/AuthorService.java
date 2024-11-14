@@ -1,4 +1,4 @@
-package com.Tavin.bookstore.service.Author;
+package com.Tavin.bookstore.service.author;
 
 import com.Tavin.bookstore.infra.exceptions.operationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;

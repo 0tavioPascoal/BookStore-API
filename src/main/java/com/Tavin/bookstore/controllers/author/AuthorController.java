@@ -1,12 +1,12 @@
-package com.Tavin.bookstore.controllers;
+package com.Tavin.bookstore.controllers.author;
 
-import com.Tavin.bookstore.infra.dtos.Authors.AuthorResponseDto;
-import com.Tavin.bookstore.infra.dtos.Authors.AuthorsRequestDto;
-import com.Tavin.bookstore.infra.Errors.ErrorResponse;
+import com.Tavin.bookstore.infra.dtos.authors.AuthorResponseDto;
+import com.Tavin.bookstore.infra.dtos.authors.AuthorsRequestDto;
+import com.Tavin.bookstore.infra.errors.ErrorResponse;
 import com.Tavin.bookstore.infra.exceptions.duplicateRecordException;
 import com.Tavin.bookstore.infra.exceptions.operationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;
-import com.Tavin.bookstore.service.Author.AuthorService;
+import com.Tavin.bookstore.service.author.AuthorService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -106,7 +106,7 @@ public class AuthorController {
             var author = optionalAuthor.get();
             author.setName(authorsRequest.name());
             author.setNationality(authorsRequest.nationality());
-            author.setDateofbirth(authorsRequest.dateofbirth());
+            author.setDateofbirth(authorsRequest.dateOfBirth());
             service.Updated(author);
 
             return ResponseEntity.noContent().build();

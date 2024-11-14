@@ -1,4 +1,4 @@
-package com.Tavin.bookstore.infra.dtos.Authors;
+package com.Tavin.bookstore.infra.dtos.authors;
 
 import com.Tavin.bookstore.model.AuthorModel;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +16,7 @@ public record AuthorsRequestDto(UUID id,
                                 String name,
                                 @NotNull(message = "required field")
                                         @Past(message = "It cannot be a future date")
-                                LocalDate dateofbirth,
+                                LocalDate dateOfBirth,
                                 @NotBlank(message = "required field")
                                         @Size(max = 50, min = 2,
                                                 message = "field outside the standard size")
@@ -25,7 +25,7 @@ public record AuthorsRequestDto(UUID id,
     public AuthorModel mappedAuthors(){
         AuthorModel author = new AuthorModel();
         author.setName(this.name());
-        author.setDateofbirth(this.dateofbirth());
+        author.setDateofbirth(this.dateOfBirth());
         author.setNationality(this.nationality());
         return author;
     }

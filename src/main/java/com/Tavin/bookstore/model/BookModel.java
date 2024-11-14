@@ -3,9 +3,13 @@ package com.Tavin.bookstore.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "tb_book")
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class BookModel {
 
     @Id
@@ -24,7 +29,7 @@ public class BookModel {
     private String title;
 
     @Column(name = "data_publication", nullable = false)
-    private LocalDate dataPublication;
+    private LocalDate publicationDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name ="gender", nullable = false, length = 30)
@@ -39,5 +44,16 @@ public class BookModel {
     )
     @JoinColumn(name = "id_autor")
     private AuthorModel author;
+
+    @CreatedDate
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "id_user")
+    private UUID idUser;
 
 }

@@ -1,4 +1,4 @@
-package com.Tavin.bookstore.infra.Errors;
+package com.Tavin.bookstore.infra.errors;
 
 import org.springframework.http.HttpStatus;
 
