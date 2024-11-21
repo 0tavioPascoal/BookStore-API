@@ -23,8 +23,8 @@ public class AuthorValidator {
     }
 
     private boolean existsRegisteredAuthor(AuthorModel author){
-        Optional<AuthorModel> authorExists = repository.findByNameAndDateofbirthAndNationality(
-                author.getName(), author.getDateofbirth(), author.getNationality()
+        Optional<AuthorModel> authorExists = repository.findByNameAndDateOfBirthAndNationality(
+                author.getName(), author.getDateOfBirth(), author.getNationality()
         );
         if(author.getId() == null ){
             return authorExists.isPresent();

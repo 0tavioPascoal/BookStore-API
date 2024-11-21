@@ -10,11 +10,4 @@ public record AuthorResponseDto(UUID id,
                                 LocalDate dateOfBirth,
                                 String nationality) {
 
-    public AuthorModel mappedAuthorsResponse(){
-        AuthorModel author = new AuthorModel();
-        author.setName(this.name());
-        author.setDateofbirth(this.dateOfBirth());
-        author.setNationality(this.nationality());
-        return author;
-    }
 }

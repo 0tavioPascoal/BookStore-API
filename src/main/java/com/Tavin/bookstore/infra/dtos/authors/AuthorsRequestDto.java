@@ -22,11 +22,4 @@ public record AuthorsRequestDto(UUID id,
                                                 message = "field outside the standard size")
                                 String nationality) {
 
-    public AuthorModel mappedAuthors(){
-        AuthorModel author = new AuthorModel();
-        author.setName(this.name());
-        author.setDateofbirth(this.dateOfBirth());
-        author.setNationality(this.nationality());
-        return author;
-    }
 }

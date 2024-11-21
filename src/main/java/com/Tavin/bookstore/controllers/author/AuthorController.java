@@ -5,6 +5,7 @@ import com.Tavin.bookstore.infra.dtos.authors.AuthorsRequestDto;
 import com.Tavin.bookstore.infra.errors.ErrorResponse;
 import com.Tavin.bookstore.infra.exceptions.duplicateRecordException;
 import com.Tavin.bookstore.infra.exceptions.operationNotPermitted;
+import com.Tavin.bookstore.infra.mappers.auhtor.AuthorMapper;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.service.author.AuthorService;
 import jakarta.validation.Valid;
@@ -23,15 +24,17 @@ import java.util.stream.Collectors;
 public class AuthorController {
 
     private final AuthorService service;
+    private final AuthorMapper mapper;
 
-    public AuthorController(AuthorService service) {
+    public AuthorController(AuthorService service, AuthorMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @PostMapping
     public ResponseEntity<Object> addAuthor(@RequestBody @Valid AuthorsRequestDto authorsRequest) {
         try {
-            AuthorModel author = authorsRequest.mappedAuthors();
+            AuthorModel author = mapper.authorModelMapper(authorsRequest);
             service.Save(author);
 
             URI location = ServletUriComponentsBuilder
@@ -48,17 +51,14 @@ public class AuthorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AuthorResponseDto> GetByDetails(@PathVariable String id) {
-        Optional<AuthorModel> optionalAuthor = service.findById(UUID.fromString(id));
-        if(optionalAuthor.isPresent()) {
-            AuthorModel author = optionalAuthor.get();
-            AuthorResponseDto authorModel = new AuthorResponseDto(
-                    author.getId(),
-                    author.getName(),
-                    author.getDateofbirth(),
-                    author.getNationality());
-            return ResponseEntity.ok(authorModel);
-        }
-        return ResponseEntity.notFound().build();
+       var idAuthor = UUID.fromString(id);
+
+      return service
+              .findById(idAuthor)
+              .map(AuthorModel -> {
+               AuthorResponseDto dto =   mapper.authorResponseDtoMapper(AuthorModel);
+                  return ResponseEntity.ok(dto);
+              }).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
@@ -87,7 +87,7 @@ public class AuthorController {
         List<AuthorResponseDto> authors = result.stream().map(author -> new AuthorResponseDto(
                 author.getId(),
                 author.getName(),
-                author.getDateofbirth(),
+                author.getDateOfBirth(),
                 author.getNationality())
         ).collect(Collectors.toList());
 
@@ -106,7 +106,7 @@ public class AuthorController {
             var author = optionalAuthor.get();
             author.setName(authorsRequest.name());
             author.setNationality(authorsRequest.nationality());
-            author.setDateofbirth(authorsRequest.dateOfBirth());
+            author.setDateOfBirth(authorsRequest.dateOfBirth());
             service.Updated(author);
 
             return ResponseEntity.noContent().build();

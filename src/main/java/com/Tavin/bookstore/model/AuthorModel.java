@@ -31,7 +31,7 @@ public class AuthorModel{
     private String name;
 
     @Column(name = "data_of_birth", nullable = false)
-    private LocalDate dateofbirth;
+    private LocalDate dateOfBirth;
 
     @Column(name = "nacionality" , length = 50, nullable = false)
     private String nationality;
