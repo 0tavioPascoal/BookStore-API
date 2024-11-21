@@ -3,6 +3,7 @@ package com.Tavin.bookstore.controllers.book;
 import com.Tavin.bookstore.infra.dtos.books.BookRequestDto;
 import com.Tavin.bookstore.infra.errors.ErrorResponse;
 import com.Tavin.bookstore.infra.exceptions.duplicateRecordException;
+import com.Tavin.bookstore.infra.mappers.book.BookMapper;
 import com.Tavin.bookstore.model.BookModel;
 import com.Tavin.bookstore.service.book.BookService;
 import jakarta.validation.Valid;
@@ -22,11 +23,12 @@ import java.net.URI;
 public class BookController {
 
     private final BookService bookService;
+    private final BookMapper bookMapper;
 
     @PostMapping
     public ResponseEntity<Object> saveBook(@RequestBody @Valid BookRequestDto requestDto) {
         try{
-            BookModel book = requestDto.BookMappedRequestDto();
+            BookModel book = bookMapper.bookModelMapper(requestDto);
             bookService.save(book);
 
             URI location = ServletUriComponentsBuilder

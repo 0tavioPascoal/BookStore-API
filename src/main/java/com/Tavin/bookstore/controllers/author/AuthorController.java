@@ -9,6 +9,7 @@ import com.Tavin.bookstore.infra.mappers.auhtor.AuthorMapper;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.service.author.AuthorService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,15 +22,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/authors")
+@RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService service;
     private final AuthorMapper mapper;
 
-    public AuthorController(AuthorService service, AuthorMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
 
     @PostMapping
     public ResponseEntity<Object> addAuthor(@RequestBody @Valid AuthorsRequestDto authorsRequest) {
@@ -84,11 +82,8 @@ public class AuthorController {
                 @RequestParam(value = "nationality", required = false) String nationality) {
 
         List<AuthorModel> result = service.search(name, nationality);
-        List<AuthorResponseDto> authors = result.stream().map(author -> new AuthorResponseDto(
-                author.getId(),
-                author.getName(),
-                author.getDateOfBirth(),
-                author.getNationality())
+        List<AuthorResponseDto> authors = result.stream()
+                .map(mapper::authorResponseDtoMapper
         ).collect(Collectors.toList());
 
         return ResponseEntity.ok(authors);
