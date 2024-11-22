@@ -1,21 +1,28 @@
 package com.Tavin.bookstore.controllers.book;
 
+import com.Tavin.bookstore.infra.dtos.authors.AuthorResponseDto;
 import com.Tavin.bookstore.infra.dtos.books.BookRequestDto;
 import com.Tavin.bookstore.infra.dtos.books.BookResponseDto;
 import com.Tavin.bookstore.infra.errors.ErrorResponse;
 import com.Tavin.bookstore.infra.exceptions.DuplicateRecordException;
 import com.Tavin.bookstore.infra.header.GeneratedHeader;
 import com.Tavin.bookstore.infra.mappers.book.BookMapper;
+import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.model.BookModel;
+import com.Tavin.bookstore.model.GenderModel;
 import com.Tavin.bookstore.service.book.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("books")
@@ -44,5 +51,33 @@ public class BookController implements GeneratedHeader {
                     var dto = bookMapper.bookResponseDtoMapper(book);
                     return ResponseEntity.ok(dto);
                 }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteBook(
+            @PathVariable String id) {
+
+        return bookService.findById(UUID.fromString(id))
+                .map(bookModel -> {
+                    bookService.deleteBook(bookModel);
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<BookResponseDto>> GetAllBooks(
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "price", required = false)BigDecimal price,
+            @RequestParam(value = "gender", required = false)GenderModel gender,
+            @RequestParam(value = "publicationDate", required = false)LocalDate publicationDate,
+            @RequestParam(value = "nameAuthor", required = false) String name) {
+
+        List<BookModel> result = bookService.search(title, publicationDate, gender, price, name);
+        List<BookResponseDto> book = result.stream()
+                .map(bookMapper::bookResponseDtoMapper
+                ).toList();
+
+        return ResponseEntity.ok(book);
     }
 }

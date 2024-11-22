@@ -11,7 +11,7 @@ public interface GeneratedHeader {
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand()
+                .buildAndExpand(id)
                 .toUri();
     }
 }
