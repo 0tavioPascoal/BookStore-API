@@ -1,6 +1,7 @@
 package com.Tavin.bookstore.controllers.book;
 
 import com.Tavin.bookstore.infra.dtos.books.BookRequestDto;
+import com.Tavin.bookstore.infra.dtos.books.BookResponseDto;
 import com.Tavin.bookstore.infra.errors.ErrorResponse;
 import com.Tavin.bookstore.infra.exceptions.DuplicateRecordException;
 import com.Tavin.bookstore.infra.header.GeneratedHeader;
@@ -10,12 +11,11 @@ import com.Tavin.bookstore.service.book.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("books")
@@ -33,5 +33,16 @@ public class BookController implements GeneratedHeader {
         URI location = generateURI(book.getId());
 
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookResponseDto> getBooks(
+            @PathVariable String id) {
+
+        return bookService.findById(UUID.fromString(id))
+                .map(book -> {
+                    var dto = bookMapper.bookResponseDtoMapper(book);
+                    return ResponseEntity.ok(dto);
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
