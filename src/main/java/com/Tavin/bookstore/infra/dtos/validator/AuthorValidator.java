@@ -1,6 +1,6 @@
 package com.Tavin.bookstore.infra.dtos.validator;
 
-import com.Tavin.bookstore.infra.exceptions.duplicateRecordException;
+import com.Tavin.bookstore.infra.exceptions.DuplicateRecordException;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.repository.AuthorRepository;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class AuthorValidator {
 
     public void validateAuthor(AuthorModel author) {
         if(existsRegisteredAuthor(author)) {
-            throw new duplicateRecordException("author already registered");
+            throw new DuplicateRecordException("author already registered");
         }
     }
 

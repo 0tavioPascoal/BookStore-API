@@ -2,7 +2,8 @@ package com.Tavin.bookstore.controllers.book;
 
 import com.Tavin.bookstore.infra.dtos.books.BookRequestDto;
 import com.Tavin.bookstore.infra.errors.ErrorResponse;
-import com.Tavin.bookstore.infra.exceptions.duplicateRecordException;
+import com.Tavin.bookstore.infra.exceptions.DuplicateRecordException;
+import com.Tavin.bookstore.infra.header.GeneratedHeader;
 import com.Tavin.bookstore.infra.mappers.book.BookMapper;
 import com.Tavin.bookstore.model.BookModel;
 import com.Tavin.bookstore.service.book.BookService;
@@ -13,36 +14,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
 @RestController
 @RequestMapping("books")
 @RequiredArgsConstructor
-public class BookController {
+public class BookController implements GeneratedHeader {
 
     private final BookService bookService;
     private final BookMapper bookMapper;
 
     @PostMapping
-    public ResponseEntity<Object> saveBook(@RequestBody @Valid BookRequestDto requestDto) {
-        try{
-            BookModel book = bookMapper.bookModelMapper(requestDto);
-            bookService.save(book);
+    public ResponseEntity<Void> saveBook(@RequestBody @Valid BookRequestDto requestDto) {
+        BookModel book = bookMapper.bookModelMapper(requestDto);
+        bookService.save(book);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(book.getId()).toUri();
+        URI location = generateURI(book.getId());
 
-          return ResponseEntity.created(location).build();
-
-        } catch (duplicateRecordException e) {
-            var eDto = ErrorResponse.errorConflict(e.getMessage());
-            return ResponseEntity.status(eDto.statusCode()).body(eDto);
-        }
-
-
+        return ResponseEntity.created(location).build();
     }
 }

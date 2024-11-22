@@ -1,6 +1,6 @@
 package com.Tavin.bookstore.service.author;
 
-import com.Tavin.bookstore.infra.exceptions.operationNotPermitted;
+import com.Tavin.bookstore.infra.exceptions.OperationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.repository.AuthorRepository;
 import com.Tavin.bookstore.repository.BookRepository;
@@ -46,7 +46,7 @@ public class AuthorService {
 
     public void deleteByAuthor(AuthorModel author){
         if(ownBook(author)){
-            throw new operationNotPermitted("It is not allowed to delete an author with a registered book");
+            throw new OperationNotPermitted("It is not allowed to delete an author with a registered book");
         }
         repository.delete(author);
     }
