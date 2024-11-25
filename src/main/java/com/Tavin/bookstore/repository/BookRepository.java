@@ -21,4 +21,6 @@ public interface BookRepository extends JpaRepository<BookModel, UUID>, JpaSpeci
                                                                                   GenderModel gender,
                                                                                   AuthorModel author);
 
+
+
 }

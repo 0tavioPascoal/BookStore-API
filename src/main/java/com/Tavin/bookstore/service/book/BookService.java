@@ -1,19 +1,14 @@
 package com.Tavin.bookstore.service.book;
 
-import com.Tavin.bookstore.infra.dtos.authors.AuthorResponseDto;
-import com.Tavin.bookstore.infra.dtos.books.BookResponseDto;
 import com.Tavin.bookstore.infra.mappers.book.BookMapper;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.model.BookModel;
 import com.Tavin.bookstore.model.GenderModel;
 import com.Tavin.bookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -39,7 +34,7 @@ public class BookService {
          bookRepository.delete(bookModel);
     }
 
-    public List<BookModel> search(String title, LocalDate publicationDate, GenderModel gender, BigDecimal price, String name) {
+    public Page<BookModel> search(String title, LocalDate publicationDate, GenderModel gender, BigDecimal price, String name, Integer page, Integer pageSize) {
         BookModel bookModel = new BookModel();
         bookModel.setTitle(title);
         bookModel.setGender(gender);
@@ -53,7 +48,17 @@ public class BookService {
                 .withIgnoreNullValues()
                 .withIgnoreCase();
         Example<BookModel> example = Example.of(bookModel, matcher);
-        return bookRepository.findAll(example);
+
+        Pageable pageRequest = PageRequest.of(page, pageSize);
+        return bookRepository.findAll(example, pageRequest);
+    }
+
+    public void updatedBook(BookModel bookModel) {
+        if(bookModel.getId() == null) {
+            throw new IllegalArgumentException("To update, the book must already be registered");
+        }
+
+        bookRepository.save(bookModel);
     }
 
 }

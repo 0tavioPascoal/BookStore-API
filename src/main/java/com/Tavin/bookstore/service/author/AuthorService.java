@@ -51,21 +51,6 @@ public class AuthorService {
         repository.delete(author);
     }
 
-//    public List<AuthorModel> search(String name, String nationality) {
-//      if(name != null && nationality != null) {
-//        return repository.findByNameAndNationality(name, nationality);
-//      }
-//      if(name != null){
-//          return repository.findByName(name);
-//      }
-//
-//      if(nationality != null){
-//          return repository.findByNationality(nationality);
-//      }
-//
-//      return repository.findAll();
-//    }
-//
     public List<AuthorModel> search(String name, String nationality) {
        AuthorModel author = new AuthorModel();
         author.setName(name);

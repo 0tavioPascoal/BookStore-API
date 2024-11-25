@@ -13,9 +13,11 @@ import com.Tavin.bookstore.model.GenderModel;
 import com.Tavin.bookstore.service.book.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDate;
@@ -66,18 +68,38 @@ public class BookController implements GeneratedHeader {
     }
 
     @GetMapping()
-    public ResponseEntity<List<BookResponseDto>> GetAllBooks(
+    public ResponseEntity<Page<BookResponseDto>> GetAllBooks(
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "price", required = false)BigDecimal price,
             @RequestParam(value = "gender", required = false)GenderModel gender,
             @RequestParam(value = "publicationDate", required = false)LocalDate publicationDate,
-            @RequestParam(value = "nameAuthor", required = false) String name) {
+            @RequestParam(value = "nameAuthor", required = false) String name,
+            @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
+            @RequestParam(value = "sizePage",defaultValue = "10",required = false)Integer sizePage
+            ) {
 
-        List<BookModel> result = bookService.search(title, publicationDate, gender, price, name);
-        List<BookResponseDto> book = result.stream()
-                .map(bookMapper::bookResponseDtoMapper
-                ).toList();
+        Page<BookModel> result = bookService.search(
+                title, publicationDate, gender, price, name, page, sizePage);
 
-        return ResponseEntity.ok(book);
+        Page<BookResponseDto> bookResult = result.map(bookMapper::bookResponseDtoMapper);
+
+        return ResponseEntity.ok(bookResult);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateBook(@RequestBody @Valid BookRequestDto requestDto
+    , @PathVariable String id) {
+        return bookService.findById(UUID.fromString(id))
+                .map( bookModel -> {
+                   BookModel bookAux = bookMapper.bookModelMapper(requestDto);
+                   bookModel.setPublicationDate(bookAux.getPublicationDate());
+                   bookModel.setTitle(bookAux.getTitle());
+                   bookModel.setPrice(bookAux.getPrice());
+                   bookModel.setGender(bookAux.getGender());
+                   bookAux.setAuthor(bookAux.getAuthor());
+                   bookService.updatedBook(bookModel);
+                   return ResponseEntity.noContent().build();
+                }).orElseGet(()-> ResponseEntity.notFound().build());
+
     }
 }
