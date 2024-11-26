@@ -27,7 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("books")
+@RequestMapping("/books")
 @RequiredArgsConstructor
 public class BookController implements GeneratedHeader {
 
