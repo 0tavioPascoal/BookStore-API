@@ -1,9 +1,11 @@
 package com.Tavin.bookstore.service.book;
 
+import com.Tavin.bookstore.infra.config.SecurityService;
 import com.Tavin.bookstore.infra.mappers.book.BookMapper;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.model.BookModel;
 import com.Tavin.bookstore.model.GenderModel;
+import com.Tavin.bookstore.model.UserModel;
 import com.Tavin.bookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -20,9 +22,11 @@ import java.util.UUID;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
+    private final SecurityService securityService;
 
     public BookModel save(BookModel bookModel) {
+        UserModel user = securityService.loggedUser();
+        bookModel.setUser(user);
         return bookRepository.save(bookModel);
     }
 

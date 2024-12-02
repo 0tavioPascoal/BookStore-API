@@ -49,7 +49,8 @@ public class AuthorModel{
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
 
-    @Column(name = "id_user")
-    private UUID idUser;
+    @JoinColumn(name = "id_user")
+    @ManyToOne
+    private UserModel user;
 
 }

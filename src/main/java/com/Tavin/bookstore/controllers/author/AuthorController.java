@@ -1,14 +1,19 @@
 package com.Tavin.bookstore.controllers.author;
 
+import com.Tavin.bookstore.infra.config.SecurityService;
 import com.Tavin.bookstore.infra.dtos.authors.AuthorResponseDto;
 import com.Tavin.bookstore.infra.dtos.authors.AuthorsRequestDto;
 import com.Tavin.bookstore.infra.header.GeneratedHeader;
 import com.Tavin.bookstore.infra.mappers.auhtor.AuthorMapper;
 import com.Tavin.bookstore.model.AuthorModel;
+import com.Tavin.bookstore.model.UserModel;
 import com.Tavin.bookstore.service.author.AuthorService;
+import com.Tavin.bookstore.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,11 +28,13 @@ import java.util.stream.Collectors;
 public class AuthorController implements GeneratedHeader {
 
     private final AuthorService service;
+    private final SecurityService securityService;
     private final AuthorMapper mapper;
 
 
     @PostMapping
-    public ResponseEntity<Void> addAuthor(@RequestBody @Valid AuthorsRequestDto authorsRequest) {
+    public ResponseEntity<Void> addAuthor(@RequestBody @Valid AuthorsRequestDto authorsRequest,
+                                          Authentication authentication) {
 
         AuthorModel author = mapper.authorModelMapper(authorsRequest);
         service.Save(author);

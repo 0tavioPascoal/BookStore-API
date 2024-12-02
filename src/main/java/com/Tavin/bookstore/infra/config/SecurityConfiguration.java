@@ -31,6 +31,9 @@ public class SecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.DELETE, "/users").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.POST, "/books").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.DELETE, "/books").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.POST, "/authors").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/authors").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.PUT, "/authors").hasRole("ADMIN");
                     authorize.anyRequest().authenticated();
                 })
                 .build();
