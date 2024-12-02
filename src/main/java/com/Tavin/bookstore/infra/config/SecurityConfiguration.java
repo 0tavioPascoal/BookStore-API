@@ -1,6 +1,7 @@
 package com.Tavin.bookstore.infra.config;
 
 
+import com.Tavin.bookstore.service.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,40 +22,28 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
-            return http
-                    .csrf(AbstractHttpConfigurer::disable)
-                    .httpBasic(Customizer.withDefaults())
-                    .authorizeHttpRequests( auth ->{
-                    auth.requestMatchers(HttpMethod.POST,"/authors").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.DELETE,"/authors").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.POST,"/users").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.DELETE,"/users").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.POST,"/books").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.DELETE,"/books").hasRole("ADMIN");
-                    auth.anyRequest().authenticated();
-                    })
-                    .build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/users").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.POST, "/books").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/books").hasRole("ADMIN");
+                    authorize.anyRequest().authenticated();
+                })
+                .build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(10);
     }
-
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("123"))
-                .roles("USER").build();
+    public UserDetailsService userDetailsService(PasswordEncoder encoder, UserService service) {
 
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("321"))
-                .roles("ADMIN").build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+        return new CustomUserDetailService(service);
     }
 
 

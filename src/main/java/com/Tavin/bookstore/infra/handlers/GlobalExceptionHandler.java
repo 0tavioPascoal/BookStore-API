@@ -5,6 +5,7 @@ import com.Tavin.bookstore.infra.errors.FieldErrors;
 import com.Tavin.bookstore.infra.exceptions.DuplicateRecordException;
 import com.Tavin.bookstore.infra.exceptions.OperationNotPermitted;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,9 +31,15 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAccesDeniedException(AccessDeniedException e){
+        return new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Acesso Negado.", List.of());
+    }
+
     @ExceptionHandler(DuplicateRecordException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleDuplcatedRecordException(DuplicateRecordException e) {
+    public ErrorResponse handleDuplicatedRecordException(DuplicateRecordException e) {
         return ErrorResponse.errorConflict(e.getMessage());
 
     }
