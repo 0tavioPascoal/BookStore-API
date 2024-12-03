@@ -27,13 +27,13 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.DELETE, "/users").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.POST, "/books").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.DELETE, "/books").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.POST, "/authors").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.DELETE, "/authors").hasRole("ADMIN");
-                    authorize.requestMatchers(HttpMethod.PUT, "/authors").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.POST, "/users").hasAnyRole("ADMIN", "GERENTE");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/users").hasAnyRole("ADMIN", "GERENTE");
+                    authorize.requestMatchers(HttpMethod.POST, "/books").hasAnyRole("ADMIN", "GERENTE");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/books").hasAnyRole("ADMIN", "GERENTE");
+                    authorize.requestMatchers(HttpMethod.POST, "/authors").hasAnyRole("ADMIN", "GERENTE");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/authors").hasAnyRole("ADMIN", "GERENTE");
+                    authorize.requestMatchers(HttpMethod.PUT, "/authors").hasAnyRole("ADMIN", "GERENTE");
                     authorize.anyRequest().authenticated();
                 })
                 .build();

@@ -55,9 +55,9 @@ public class BookController implements GeneratedHeader {
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping()
     public ResponseEntity<Object> deleteBook(
-            @PathVariable String id) {
+            @RequestParam String id) {
 
         return bookService.findById(UUID.fromString(id))
                 .map(bookModel -> {
