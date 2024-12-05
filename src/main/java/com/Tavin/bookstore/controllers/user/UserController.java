@@ -23,14 +23,6 @@ public class UserController implements GeneratedHeader {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @PostMapping
-    public ResponseEntity<Void> register(@RequestBody @Valid UserRequestDto userRequestDto) {
-        UserModel user = userMapper.UserModelMapper(userRequestDto);
-        userService.save(user);
-
-        URI location = generateURI(user.getId());
-        return ResponseEntity.created(location).build();
-    }
 
     @DeleteMapping()
     public ResponseEntity<Object> deleteBook(

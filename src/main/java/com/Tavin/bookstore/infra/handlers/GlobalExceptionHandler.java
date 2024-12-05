@@ -4,14 +4,18 @@ import com.Tavin.bookstore.infra.errors.ErrorResponse;
 import com.Tavin.bookstore.infra.errors.FieldErrors;
 import com.Tavin.bookstore.infra.exceptions.DuplicateRecordException;
 import com.Tavin.bookstore.infra.exceptions.OperationNotPermitted;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import jakarta.servlet.ServletException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,5 +60,27 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "An unexpected error has occurred, please contact the administration",
                 List.of());
+    }
+
+    @ExceptionHandler(JWTCreationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleJwtCreate(JWTCreationException e) {
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "JWT Creation Error", List.of());
+    }
+
+    @ExceptionHandler(JWTVerificationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleJWTVerificationException(JWTVerificationException e) {
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "JWT Verification Error", List.of());
+    }
+
+    @ExceptionHandler(ServletException.class)
+    public ErrorResponse handleServletExecptionError(ServletException e) {
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Servlet Error", List.of());
+    }
+
+    @ExceptionHandler(IOException.class )
+    public ErrorResponse handleIoException(IOException e) {
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "IO Error", List.of());
     }
 }

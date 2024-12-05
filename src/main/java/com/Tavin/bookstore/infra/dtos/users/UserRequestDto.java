@@ -1,5 +1,6 @@
 package com.Tavin.bookstore.infra.dtos.users;
 
+import com.Tavin.bookstore.model.RolesModel;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,5 +24,5 @@ public record UserRequestDto(
         String username,
 
         @NotNull(message = "required field")
-        List<String> roles) {
+        RolesModel roles) {
 }

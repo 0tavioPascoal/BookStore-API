@@ -1,11 +1,10 @@
 package com.Tavin.bookstore.service.user;
 
-import com.Tavin.bookstore.model.BookModel;
+
 import com.Tavin.bookstore.model.UserModel;
 import com.Tavin.bookstore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,12 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final  PasswordEncoder passwordEncoder;
 
 
     public void save(UserModel user){
-        var senha = user.getPassword();
-        user.setPassword(passwordEncoder.encode(senha));
+        var pass = passwordEncoder.encode(user.getPassword());
+        user.setPassword(pass);
         userRepository.save(user);
     }
 
@@ -57,7 +56,4 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public UserModel findByLogin(String login) {
-        return userRepository.findByLogin(login);
-    }
 }

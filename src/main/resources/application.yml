@@ -1,3 +1,5 @@
+
+
 spring:
   application:
     name: BookStore
@@ -15,3 +17,7 @@ spring:
         jdbc:
           lob:
             non-contextual-creation: true
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:my-secret-key}

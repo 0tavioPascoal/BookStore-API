@@ -1,6 +1,6 @@
 package com.Tavin.bookstore.service.author;
 
-import com.Tavin.bookstore.infra.config.SecurityService;
+
 import com.Tavin.bookstore.infra.exceptions.OperationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;
 import com.Tavin.bookstore.model.UserModel;
@@ -10,7 +10,7 @@ import com.Tavin.bookstore.infra.dtos.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.stereotype.Repository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,14 +23,11 @@ public class AuthorService {
 
     private final AuthorRepository repository;
     private final AuthorValidator validator;
-    private final SecurityService securityService;
     private final BookRepository bookRepository;
 
 
     public AuthorModel Save(AuthorModel authorModel) {
         validator.validateAuthor(authorModel);
-        UserModel user = securityService.loggedUser();
-        authorModel.setUser(user);
         return repository.save(authorModel);}
 
     public void Updated(AuthorModel authorModel) {
