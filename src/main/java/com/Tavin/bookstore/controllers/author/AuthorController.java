@@ -3,16 +3,22 @@ package com.Tavin.bookstore.controllers.author;
 
 import com.Tavin.bookstore.infra.dtos.authors.AuthorResponseDto;
 import com.Tavin.bookstore.infra.dtos.authors.AuthorsRequestDto;
+import com.Tavin.bookstore.infra.dtos.books.BookResponseDto;
 import com.Tavin.bookstore.infra.header.GeneratedHeader;
 import com.Tavin.bookstore.infra.mappers.auhtor.AuthorMapper;
 import com.Tavin.bookstore.model.AuthorModel;
+import com.Tavin.bookstore.model.BookModel;
+import com.Tavin.bookstore.model.GenderModel;
 import com.Tavin.bookstore.service.author.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,16 +69,19 @@ public class AuthorController implements GeneratedHeader {
     }
 
     @GetMapping()
-    public ResponseEntity<List<AuthorResponseDto>> GetAllAuthors(
+    public ResponseEntity<Page<AuthorResponseDto>> GetAllBooks(
+            @RequestParam(value = "nationality", required = false) String nationality,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "nationality", required = false) String nationality) {
+            @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
+            @RequestParam(value = "sizePage",defaultValue = "10",required = false)Integer sizePage
+    ) {
 
-        List<AuthorModel> result = service.search(name, nationality);
-        List<AuthorResponseDto> authors = result.stream()
-                .map(mapper::authorResponseDtoMapper
-                ).collect(Collectors.toList());
+        Page<AuthorModel> result = service.search(
+                name, nationality, page, sizePage);
 
-        return ResponseEntity.ok(authors);
+        Page<AuthorResponseDto> authorResult = result.map(mapper::authorResponseDtoMapper);
+
+        return ResponseEntity.ok(authorResult);
     }
 
     @PutMapping("/{id}")
