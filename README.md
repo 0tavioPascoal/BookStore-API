@@ -213,7 +213,7 @@
 
 | Parâmetro   | Tipo       | Descrição                                   |
 | :---------- | :--------- | :------------------------------------------ |
-| `id`      | `string` | **Obrigatório** Id do autor. |
+| `id`      | `string` | **Obrigatório** Id do Livro. |
 
 | Corpo         | Tipo       | Descrição                                   |
 | :----------   | :--------- | :------------------------------------------ |
