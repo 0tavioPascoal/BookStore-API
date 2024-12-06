@@ -170,7 +170,7 @@
 | `page`      | `integer` | Número da pagina. |
 | `title`      | `string` | Titulo do livro. |
 | `price`      | `bigDecimal` | Preço do livro. |
-| `gender`      | `GenderModel` | Genero do livro -> (Romance, Aventura e etc...). |
+| `gender`      | `string` | Genero do livro -> (Romance, Aventura e etc...). |
 | `publicationDate`      | `Date` | Data da publicação do livro. |
 | `nameAuthor`      | `String` | Nome do Autor do livro. |
 
@@ -192,7 +192,7 @@
 | :----------   | :--------- | :------------------------------------------ |
 | `title`    | `string`  | **Obrigatório** . |
 | `publicationDate`   | `LocalDate`   | **Obrigatório** Data da publicação do Livro. |
-| `gender`   | `genderModel`   | **Obrigatório** Genero do livro. |
+| `gender`   | `string`   | **Obrigatório** Genero do livro. |
 | `price`   | `bigDecimal`   | **Obrigatório** Preço do livro. |
 | `idAuthor`   | `string`   | **Obrigatório** Id do Autor para cadastrar o Livro. |
 
@@ -219,7 +219,7 @@
 | :----------   | :--------- | :------------------------------------------ |
 | `title`    | `string`  | **Obrigatório** . |
 | `publicationDate`   | `LocalDate`   | **Obrigatório** Data da publicação do Livro. |
-| `gender`   | `genderModel`   | **Obrigatório** Genero do livro. |
+| `gender`   | `string`   | **Obrigatório** Genero do livro. |
 | `price`   | `bigDecimal`   | **Obrigatório** Preço do livro. |
 | `idAuthor`   | `string`   | **Obrigatório** Id do Autor para cadastrar o Livro. |
 
