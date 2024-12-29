@@ -1,5 +1,19 @@
 # BookStore-API
 
+## Docker
+
+Para usar o docker utilizar o comando a seguir no terminal da própria idea ->
+
+```Docker
+ $ docker compose up
+```
+
+Para derrubar o container do docker utilizar o comando a seguir no terminal da própria idea ->
+
+```Docker
+ $ docker compose down
+```
+
 ## Documentação da API
 
 ### Autenticação
