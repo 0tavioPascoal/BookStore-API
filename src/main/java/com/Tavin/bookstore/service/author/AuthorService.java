@@ -3,16 +3,19 @@ package com.Tavin.bookstore.service.author;
 
 import com.Tavin.bookstore.infra.exceptions.OperationNotPermitted;
 import com.Tavin.bookstore.model.AuthorModel;
+import com.Tavin.bookstore.model.BookModel;
+import com.Tavin.bookstore.model.GenderModel;
 import com.Tavin.bookstore.model.UserModel;
 import com.Tavin.bookstore.repository.AuthorRepository;
 import com.Tavin.bookstore.repository.BookRepository;
 import com.Tavin.bookstore.infra.dtos.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.*;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,17 +52,19 @@ public class AuthorService {
         repository.delete(author);
     }
 
-    public List<AuthorModel> search(String name, String nationality) {
-       AuthorModel author = new AuthorModel();
-        author.setName(name);
+    public Page<AuthorModel> search(String name, String nationality,  Integer page, Integer pageSize) {
+        AuthorModel author = new AuthorModel();
         author.setNationality(nationality);
+        author.setName(name);
 
-        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
                 .withIgnoreNullValues()
-                .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
-        Example<AuthorModel> example = Example.of(author, exampleMatcher);
-        return repository.findAll(example);
+                .withIgnoreCase();
+        Example<AuthorModel> example = Example.of(author, matcher);
+
+        Pageable pageRequest = PageRequest.of(page, pageSize);
+        return repository.findAll(example, pageRequest);
     }
 
     public boolean ownBook(AuthorModel author){
