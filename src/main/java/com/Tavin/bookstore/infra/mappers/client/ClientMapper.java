@@ -1,4 +1,4 @@
-package com.Tavin.bookstore.infra.mappers;
+package com.Tavin.bookstore.infra.mappers.client;
 
 import com.Tavin.bookstore.infra.dtos.clients.ClientRequestDto;
 import com.Tavin.bookstore.infra.dtos.clients.ClientResponseDto;
