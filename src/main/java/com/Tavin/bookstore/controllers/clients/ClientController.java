@@ -42,4 +42,13 @@ public class ClientController implements GeneratedHeader {
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping
+    public ResponseEntity<Object> deleteClient(@RequestParam String id) {
+        return clientService.findById(UUID.fromString(id))
+                .map(client -> {
+                    clientService.delete(client);
+                    return ResponseEntity.ok().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
