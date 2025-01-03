@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/authors").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/client").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/authors").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/authors").hasRole("ADMIN")
                         .anyRequest().authenticated()

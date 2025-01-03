@@ -45,6 +45,13 @@ public class BookModel {
     @JoinColumn(name = "id_autor")
     private AuthorModel author;
 
+    @ManyToOne(
+//            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(name = "id_client")
+    private ClientsModel client;
+
     @CreatedDate
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
